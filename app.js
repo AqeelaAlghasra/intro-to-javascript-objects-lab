@@ -176,11 +176,11 @@ Solve Exercise 11 here:
 game.catchPokemon =function( pokemonObj) {
   game.party.push(pokemonObj)
 
-  game.items[1].quantity=-1
+  game.items[1].quantity=game.items[1].quantity-1
   console.log(game.items)
 }
 
-
+//game.catchPokemon()
 
 /*
 Exercise 12
@@ -192,7 +192,7 @@ Solve Exercise 12 here:
 
 
 game['gyms'].forEach(g => {
-  if ( g.difficulty< 3)
+  if ( g.difficulty< 6)
     g.completed=true
   //console.log(g)    
 });
@@ -225,13 +225,24 @@ For example, if five gym objects have a value of `true` on their `completed` pro
 Solve Exercise 13 here:
 */
 
-game.gymStatus =function( pokemonObj) {
-  game.party.push(pokemonObj)
+game.gymStatus =function() {
+  const gymTally={
+    'completed': 0,
+    'incomplete': 0,
+  }
 
-  game.items[1].quantity=-1
-  console.log(game.items)
+  for (let i=0;i<game.gyms.length;i++){
+    if( game.gyms[i].completed==true)
+      //console.log(gymTally.completed)
+      gymTally.completed= gymTally.completed+1
+      
+    else if(game.gyms[i].completed==false)
+      gymTally.incomplete=gymTally.incomplete+1
+  }
+  console.log(gymTally)
 }
 
+game.gymStatus()
 /*
 Exercise 14
 1. Add a `partyCount` method to `game` that counts the number of Pokémon in your party.
@@ -245,6 +256,12 @@ Solve Exercise 14 here:
 */
 
 
+game.partyCount = function () {
+  return game.gyms.party.length
+}
+
+
+
 /*
 Exercise 15
 1. Now, complete gyms with a difficulty below 8. Reflect on how this is similar to or different from the previous gym exercises.
@@ -252,6 +269,13 @@ Exercise 15
 
 Solve Exercise 15 here:
 */
+
+game['gyms'].forEach(g => {
+  if ( g.difficulty < 8 && g.difficulty> 6)
+    g.completed=true
+  //console.log(g)    
+});
+
 
 
 
@@ -262,6 +286,7 @@ Exercise 16
 
 Solve Exercise 16 here:
 */
+// console.log(game)
 
 
 
@@ -274,6 +299,8 @@ Exercise 17
 Solve Exercise 17 here:
 */
 
+// game.party.sort((a,b)=> b.hp-a.hp)
+// console.log(game.party)
 
 
 /*
@@ -295,7 +322,18 @@ Also, log the `game.items` array to confirm that the pokeball quantity is being 
 Solve Exercise 18 here:
 */
 
+// game.collection=[]
 
+// game.catchPokemon =function( pokemonObj) {
+//   if (game.party.length <6){
+//     game.party.push(pokemonObj)
+//     game.items[1].quantity=game.items[1].quantity-1}
+//   else{
+//     game.collection.push(pokemonObj)
+//   }
+//   console.log(game.items)
+
+// }
 /*
 Exercise 19
 Copy the `catchPokemon` method that you just wrote above, and paste it below. The time has come to make it so that we cannot catch a Pokemon when we do not have any pokeballs to catch it with. 
@@ -307,6 +345,25 @@ Also, ensure that the Pokemon isn't added to the `game.party` or the `game.colle
 Solve Exercise 19 here:
 */
 
+
+// game.catchPokemon =function( pokemonObj) {
+//   if(game.items[1].quantity >0){
+  
+//     if (game.party.length <6){
+//       game.party.push(pokemonObj)
+      
+//       game.items[1].quantity=game.items[1].quantity-1
+//     }
+//     else{
+//       game.collection.push(pokemonObj)
+//     }
+//   }
+//   else {
+//     console.log("There are not enough pokeballs to catch ",pokemonObj.name)
+//   }
+//   console.log(game.items)
+
+// }
 
 
 
@@ -321,7 +378,33 @@ If there is not a match, then return a string noting that the selected Pokemon d
 Solve Exercise 20 here:
 */
 
+game.catchPokemon =function( pokemonName) {
+  let name=pokemonName.toString().toLowerCase()
+  
+  let obj=pokemon.find(x => x.name.toLowerCase() ===name)
 
+  if (obj!={}){
+    if(game.items[1].quantity >0){
+    
+      if (game.party.length <6){
+        game.party.push(obj)
+        
+        game.items[1].quantity=game.items[1].quantity-1
+      }
+      else{
+        game.collection.push(obj)
+      }
+    }
+    else {
+      console.log("There are not enough pokeballs to catch ",obj.name)
+    }
+    console.log(game.items)
+  }else{
+    console.log('selected Pokemon does not exist')
+  }
+}
+
+game.catchPokemon('Pikachu')
 
 /*
 Exercise 21
@@ -349,3 +432,17 @@ Log the object when it's constructed.
 Solve Exercise 21 here:
 
 */
+
+const unique = [...new Set(pokemon.map(item => item.type))];
+console.log(unique)
+const newPokemon={}
+unique.forEach(element => {
+  newPokemon[element]=[]
+
+  pokemon.forEach(p => {
+    if (p.type===element){
+      newPokemon[element].push(p)
+    }
+  });  
+});
+console.log(newPokemon)
